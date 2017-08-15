@@ -2,12 +2,14 @@ package main
 
 import (
 	"fmt"
+	"github.com/GeunhoKim/go-algorithm/algospot/festival"
+	"github.com/GeunhoKim/go-algorithm/algospot/boggle"
+	"github.com/GeunhoKim/go-algorithm/algospot/picnic"
 )
 
 /*
 Algospot
-	Problem 1.2 FESTIVAL
-	(https://algospot.com/judge/problem/read/FESTIVAL)
+	Main Executor
 */
 var DEBUG = true
 
