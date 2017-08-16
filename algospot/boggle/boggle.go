@@ -1,8 +1,5 @@
 package boggle
 
-import (
-	"fmt"
-)
 
 /*
 Algospot
