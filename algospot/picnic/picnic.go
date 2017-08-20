@@ -61,30 +61,32 @@ func ReadProblem() {
 func SolveProblem() {
 	// 기저: 학생 수가 홀 수일 때
 	if nStudents % 2 != 0 {
-		PrintSolution(0)
+		printSolution(0)
 	}
 
 	toSelect := len(aMatchMatrix[0])
 	selected := make(map[int]bool)
 	selectPairs(toSelect, &selected)
 
-
-}
-
-func PrintSolution(solution int) {
-	fmt.Println(solution)
 }
 
 func selectPairs(toSelect int, selected *map[int]bool) {
 	if toSelect == 0 {
-		PrintSolution(nSolutions)
+		printSolution(nSolutions)
 	}
 	for i := 0; i < nStudents; i++ {
 		(*selected)[i] = true
 
-		for len(aMatchMatrix[i]) > 0 {
+		nFriends := len(aMatchMatrix[i])
 
+		for nFriends > 0 {
+			(*selected)[nFriends - 1] = true
+			nFriends--
 		}
 		//selectPairs(nPairs - 1, selected)
 	}
+}
+
+func printSolution(solution int) {
+	fmt.Println(solution)
 }

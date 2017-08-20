@@ -1,14 +1,11 @@
-package picnic_test
+package picnic
 
 import (
-	"github.com/GeunhoKim/go-algorithm/algospot/picnic"
 	"testing"
+	"fmt"
 )
 
 func TestReadCases(t *testing.T) {
-
-	picnic.ReadCases()
-
-	println(picnic.Cases)
-
+	ReadNumberOfCases()
+	fmt.Println(Cases)
 }
