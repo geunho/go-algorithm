@@ -2,6 +2,7 @@ package fanmeeting
 
 import (
 	"fmt"
+	"sync"
 )
 
 /*
@@ -12,26 +13,28 @@ Algospot
 
 const ProblemTItle = "Fan Meeting Problem"
 
-const M = true
-const F = false
+const (
+	M = true
+	F = false
+)
 
-var Cases int
+func ReadNumberOfCases() int {
+	var cases int
+	fmt.Scanf("%d", &cases)
 
-var _members []bool
-var _fans []bool
-
-func ReadNumberOfCases() {
-	fmt.Scanf("%d", &Cases)
+	return cases
 }
 
-func ReadProblem() {
+func ReadProblem() ([]bool, []bool){
 	var membersStr string
 	fmt.Scan(&membersStr)
-	_members = transformGenderInputs(membersStr)
+	members := transformGenderInputs(membersStr)
 
 	var fansStr string
 	fmt.Scan(&fansStr)
-	_fans = transformGenderInputs(fansStr)
+	fans := transformGenderInputs(fansStr)
+
+	return members, fans
 }
 
 func transformGenderInputs(gendersStr string) []bool {
@@ -54,8 +57,6 @@ func transformGenderInputs(gendersStr string) []bool {
 }
 
 func SolveProblem(members []bool, fans []bool) int {
-	nAllMembersHug := 0
-
 	nMembers := len(members)
 	nIterations := len(fans) - nMembers + 1
 
@@ -65,13 +66,67 @@ func SolveProblem(members []bool, fans []bool) int {
 		return nIterations
 	}
 
-	for i := 0; i < nIterations; i++ {
-		targetFans := fans[i : i+nMembers]
+	menInFans := findMenIndicesInMembers(&fans)
 
-		if isAllMemberHug(&menInMembers, &targetFans) {
+	if len(menInFans) == 0 {
+		return nIterations
+	}
+
+	result := asyncHug(&menInMembers, &fans, nIterations, nMembers)
+	//result := hug(&menInMembers, &fans, nIterations, nMembers)
+
+	menInMembers = nil
+	menInFans = nil
+
+	return result
+}
+
+func hug(menInMembers *[]int, fans *[]bool, nIterations int, nMembers int) int {
+	nAllMembersHug := 0
+
+	for i := 0; i < nIterations; i++ {
+		targetFans := (*fans)[i : i+nMembers]
+
+		if isAllMemberHug(menInMembers, &targetFans) {
 			nAllMembersHug++
 		}
 	}
+
+	return nAllMembersHug
+}
+
+func asyncHug(menInMembers *[]int, fans *[]bool, nIterations int, nMembers int) int {
+	nAllMembersHug := 0
+
+	iterGroup := sync.WaitGroup{}
+
+	var lock sync.Mutex
+
+	for i := 0; i < nIterations; i++ {
+		targetFans := (*fans)[i : i+nMembers]
+		if  i%4 == 0 {
+			if isAllMemberHug(menInMembers, &targetFans) {
+				lock.Lock()
+				nAllMembersHug++
+				lock.Unlock()
+			}
+
+			targetFans = nil
+		} else {
+			iterGroup.Add(1)
+			go func() {
+				defer iterGroup.Done()
+				if isAllMemberHug(menInMembers, &targetFans) {
+					lock.Lock()
+					defer lock.Unlock()
+					nAllMembersHug++
+				}
+				targetFans = nil
+			}()
+		}
+	}
+
+	iterGroup.Wait()
 
 	return nAllMembersHug
 }
