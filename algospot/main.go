@@ -1,8 +1,11 @@
 package main
 
 import (
-	"github.com/GeunhoKim/go-algorithm/algospot/picnic"
 	"fmt"
+	"os"
+
+	"github.com/GeunhoKim/go-algorithm/algospot/fanmeeting"
+	"github.com/GeunhoKim/go-algorithm/algospot/quadtree"
 )
 
 /*
@@ -11,21 +14,44 @@ Algospot
 */
 const DEBUG = true
 
-func main() {
-	printd(picnic.ProblemTitle)
-
-	picnic.ReadNumberOfCases()
-
-	nCases := picnic.Cases
-	for nCases > 0 {
-		picnic.ReadProblem()
-
-
-	}
-
+type Problem interface {
+	GetProblemTitle() string
+	ReadProblem()
+	SolveProblem() interface{}
 }
 
-func printd(args ...string) {
+const problems = map[string]Problem{
+	"fanmeeting": fanmeeting.FanMeeting{},
+	"quadtree":   quadtree.QuadTree{},
+}
+
+func main() {
+	problemName := os.Args[1]
+
+	problem := problems[problemName]
+
+	title := problem.GetProblemTitle()
+	printd(title)
+
+	cases := readNumberOfCases()
+	for cases > 0 {
+		problem.ReadProblem()
+		result := problem.SolveProblem()
+
+		fmt.Println(result)
+
+		cases--
+	}
+}
+
+func readNumberOfCases() int {
+	var cases int
+	fmt.Scanf("%d", &cases)
+
+	return cases
+}
+
+func printd(args ...interface{}) {
 	if DEBUG {
 		fmt.Println(args)
 	}

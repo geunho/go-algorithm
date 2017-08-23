@@ -11,30 +11,54 @@ Algospot
 	(https://algospot.com/judge/problem/read/FANMEETING)
 */
 
-const ProblemTItle = "Fan Meeting Problem"
+const ProblemTitle = "Fan Meeting Problem"
+
+type FanMeeting struct {
+	members []bool
+	fans    []bool
+}
+
+var problem = FanMeeting{}
 
 const (
 	M = true
 	F = false
 )
 
-func ReadNumberOfCases() int {
-	var cases int
-	fmt.Scanf("%d", &cases)
-
-	return cases
+func (p FanMeeting) GetProblemTitle() string {
+	return ProblemTitle
 }
 
-func ReadProblem() ([]bool, []bool){
+func (p FanMeeting) ReadProblem() {
 	var membersStr string
 	fmt.Scan(&membersStr)
-	members := transformGenderInputs(membersStr)
+	problem.members = transformGenderInputs(membersStr)
 
 	var fansStr string
 	fmt.Scan(&fansStr)
-	fans := transformGenderInputs(fansStr)
+	problem.fans = transformGenderInputs(fansStr)
+}
 
-	return members, fans
+func (p FanMeeting) SolveProblem() interface{} {
+	nMembers := len(problem.members)
+	nIterations := len(problem.fans) - nMembers + 1
+
+	menInMembers := findMenIndicesInMembers(&(problem.members))
+
+	if len(menInMembers) == 0 {
+		return nIterations
+	}
+
+	menInFans := findMenIndicesInMembers(&(problem.fans))
+
+	if len(menInFans) == 0 {
+		return nIterations
+	}
+
+	result := asyncHug(&menInMembers, &(problem.fans), nIterations, nMembers)
+	//result := hug(&menInMembers, &fans, nIterations, nMembers)
+
+	return result
 }
 
 func transformGenderInputs(gendersStr string) []bool {
@@ -54,31 +78,6 @@ func transformGenderInputs(gendersStr string) []bool {
 	}
 
 	return genders
-}
-
-func SolveProblem(members []bool, fans []bool) int {
-	nMembers := len(members)
-	nIterations := len(fans) - nMembers + 1
-
-	menInMembers := findMenIndicesInMembers(&members)
-
-	if len(menInMembers) == 0 {
-		return nIterations
-	}
-
-	menInFans := findMenIndicesInMembers(&fans)
-
-	if len(menInFans) == 0 {
-		return nIterations
-	}
-
-	result := asyncHug(&menInMembers, &fans, nIterations, nMembers)
-	//result := hug(&menInMembers, &fans, nIterations, nMembers)
-
-	menInMembers = nil
-	menInFans = nil
-
-	return result
 }
 
 func hug(menInMembers *[]int, fans *[]bool, nIterations int, nMembers int) int {
@@ -104,7 +103,7 @@ func asyncHug(menInMembers *[]int, fans *[]bool, nIterations int, nMembers int) 
 
 	for i := 0; i < nIterations; i++ {
 		targetFans := (*fans)[i : i+nMembers]
-		if  i%4 == 0 {
+		if i%4 == 0 {
 			if isAllMemberHug(menInMembers, &targetFans) {
 				lock.Lock()
 				nAllMembersHug++

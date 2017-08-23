@@ -6,7 +6,9 @@ import (
 )
 
 func TestSolveProblem(t *testing.T) {
-	result := SolveProblem("xxwwwbxwxwbbbwwxxxwwbbbwwwwbb")
+	problem.compressed = "xxwwwbxwxwbbbwwxxxwwbbbwwwwbb"
+	//problem.compressed = "xbwwb"
+	result := problem.SolveProblem()
 
 	fmt.Println(result)
 }

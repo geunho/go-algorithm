@@ -10,28 +10,27 @@ Algospot
 
 const ProblemTitle = "Revsere Quad Tree"
 
-func ReadNumberOfCases() int {
-	var cases int
-	fmt.Scanf("%d", &cases)
-
-	return cases
+type QuadTree struct {
+	compressed string
 }
 
-func ReadProble() string {
-	var compressed string
-	fmt.Scanf("%s", compressed)
+var problem = QuadTree{}
 
-	return compressed
+func (p QuadTree)GetProblemTitle() string {
+	return ProblemTitle
 }
 
-func SolveProblem(compressed string) string {
-	result, _ := reverse([]rune(compressed))
+func (p QuadTree)ReadProblem() {
+	fmt.Scanf("%s", &(problem.compressed))
+}
+
+func (p QuadTree)SolveProblem() interface{} {
+	result, _ := reverse([]rune(problem.compressed))
 
 	return result
 }
 
 func reverse(compressed []rune) (string, int) {
-	fmt.Println(compressed)
 	tree := []string{}
 
 	iterations := 0
@@ -45,14 +44,14 @@ func reverse(compressed []rune) (string, int) {
 			tree = append(tree, partialResult)
 			iterations += delta
 			if iterations >= len(compressed) {
-				break;
+				break
 			}
 		} else {
 
 			tree = append(tree, string(compressed[iterations]))
 			iterations++
-			fmt.Println(tree)
 		}
+
 		if len(tree) == 4 {
 			return "x" + string(tree[2]) + string(tree[3]) + string(tree[0]) + string(tree[1]), iterations + 1
 		}
