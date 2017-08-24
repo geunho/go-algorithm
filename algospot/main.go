@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/GeunhoKim/go-algorithm/algospot/fanmeeting"
+	"github.com/GeunhoKim/go-algorithm/algospot/fence"
 	"github.com/GeunhoKim/go-algorithm/algospot/quadtree"
 )
 
@@ -20,9 +21,10 @@ type Problem interface {
 	SolveProblem() interface{}
 }
 
-const problems = map[string]Problem{
+var problems = map[string]Problem{
 	"fanmeeting": fanmeeting.FanMeeting{},
 	"quadtree":   quadtree.QuadTree{},
+	"fence":      fence.Fence{},
 }
 
 func main() {

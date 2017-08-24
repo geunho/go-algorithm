@@ -1,33 +1,14 @@
 package fence
 
 import (
-	"testing"
 	"fmt"
-	"reflect"
-	"time"
 	"math/rand"
+	"testing"
+	"time"
 )
 
-func TestTransformInputs(t *testing.T) {
-	problem.nPanels = 7
-
-	input := "7 1 5 9 6 7 3"
-	transformed := transformInput(input)
-
-	panels := []int{ 7, 1, 5, 9, 6, 7, 3}
-
-	if !reflect.DeepEqual(transformed, panels) {
-		t.Error(
-			"For", input,
-			"exepected", panels,
-			"got", transformed,
-		)
-	}
-
-}
-
 func TestLefmax(t *testing.T) {
-	partialPanels := []int{ 7,1,5, 4, 3, 6}
+	partialPanels := []int{7, 1, 5, 4, 3, 6}
 	baseHeight := 3
 	solution := 4
 
@@ -43,7 +24,7 @@ func TestLefmax(t *testing.T) {
 }
 
 func TestRightmax(t *testing.T) {
-	partialPanels := []int{ 4, 3, 7, 1, 2}
+	partialPanels := []int{4, 3, 7, 1, 2}
 	baseHeight := 3
 	solution := 3
 
@@ -60,16 +41,14 @@ func TestRightmax(t *testing.T) {
 
 func TestSolveProblem(t *testing.T) {
 
-	inputStr := "1 4 4 4 4 1 1"
-	problem.nPanels = 7
-	problem.panels = transformInput(inputStr)
-	solution := 16
+	problem.panels = []int{7, 1, 5, 9, 6, 7, 3}
+	solution := 20
 
 	result := problem.SolveProblem()
 
 	fmt.Println(result)
 
-	if result != solution  {
+	if result != solution {
 		t.Error(
 			"For", problem.panels,
 			"exepected", solution,
@@ -83,10 +62,7 @@ func TestSolveProblems(t *testing.T) {
 	caseSize := 20000
 
 	for cases > 0 {
-		inputStr := genTestCase(caseSize)
-		problem.nPanels = caseSize
-		problem.panels = transformInput(inputStr)
-
+		problem.panels = gencase(caseSize)
 		result := problem.SolveProblem()
 
 		fmt.Print(result)
@@ -94,18 +70,19 @@ func TestSolveProblems(t *testing.T) {
 
 		cases--
 	}
+
+	fmt.Println()
 }
 
-func genTestCase(size int) string {
+func gencase(size int) []int {
 	min := 1
 	max := 10000
-	testCase := ""
+	testCase := make([]int, size)
 
-	rand.Seed(time.Now().Unix())
+	rand.Seed(time.Now().UTC().UnixNano())
 
-	for size > 0 {
-		testCase += string(rand.Intn(max - min) + min) + " "
-		size--
+	for i := 0; i < size; i++ {
+		testCase[i] = rand.Intn(max-min) + min
 	}
 
 	return testCase
