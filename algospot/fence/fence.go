@@ -48,7 +48,8 @@ func transformInput(panelsStr string) []int {
 func (p Fence) SolveProblem() interface{} {
 	maxArea := 0
 
-	for i, panel := range problem.panels {
+	for i := 0; i < len(problem.panels); i++ {
+		panel := problem.panels[i]
 
 		left := leftmax(problem.panels[:i], panel)
 		right := rightmax(problem.panels[i+1:], panel)
@@ -57,7 +58,6 @@ func (p Fence) SolveProblem() interface{} {
 		if maxArea < area {
 			maxArea = area
 		}
-
 	}
 
 	return maxArea
@@ -66,11 +66,9 @@ func (p Fence) SolveProblem() interface{} {
 func leftmax(partialPanels []int, baseHeight int) int {
 	sum := 0
 
-	if len(partialPanels) == 0 {
-		return sum
-	}
+	startIndex := len(partialPanels) - 1
 
-	for i := len(partialPanels) -1; i < 0; i-- {
+	for i := startIndex; i >= 0; i-- {
 		panel := partialPanels[i]
 
 		if baseHeight <= panel {
@@ -85,7 +83,8 @@ func leftmax(partialPanels []int, baseHeight int) int {
 
 func rightmax(partialPanels []int, baseHeight int) int {
 	sum := 0
-	for panel := range partialPanels {
+
+	for _, panel := range partialPanels {
 		if baseHeight <= panel  {
 			sum++
 		} else {
