@@ -55,8 +55,8 @@ func (p FanMeeting) SolveProblem() interface{} {
 		return nIterations
 	}
 
-	result := asyncHug(&menInMembers, &(problem.fans), nIterations, nMembers)
-	//result := hug(&menInMembers, &fans, nIterations, nMembers)
+	//result := asyncHug(&menInMembers, &(problem.fans), nIterations, nMembers)
+	result := hug(&menInMembers, &(problem.fans), nIterations, nMembers)
 
 	return result
 }
@@ -97,35 +97,19 @@ func hug(menInMembers *[]int, fans *[]bool, nIterations int, nMembers int) int {
 func asyncHug(menInMembers *[]int, fans *[]bool, nIterations int, nMembers int) int {
 	nAllMembersHug := 0
 
-	iterGroup := sync.WaitGroup{}
-
 	var lock sync.Mutex
-
 	for i := 0; i < nIterations; i++ {
 		targetFans := (*fans)[i : i+nMembers]
-		if i%4 == 0 {
+
+		go func() {
 			if isAllMemberHug(menInMembers, &targetFans) {
 				lock.Lock()
+				defer lock.Unlock()
 				nAllMembersHug++
-				lock.Unlock()
 			}
-
 			targetFans = nil
-		} else {
-			iterGroup.Add(1)
-			go func() {
-				defer iterGroup.Done()
-				if isAllMemberHug(menInMembers, &targetFans) {
-					lock.Lock()
-					defer lock.Unlock()
-					nAllMembersHug++
-				}
-				targetFans = nil
-			}()
-		}
+		}()
 	}
-
-	iterGroup.Wait()
 
 	return nAllMembersHug
 }
