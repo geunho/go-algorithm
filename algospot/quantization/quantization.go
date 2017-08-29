@@ -1,6 +1,10 @@
 package quantization
 
-import "fmt"
+import (
+	"fmt"
+	"reflect"
+	"math"
+)
 
 
 /*
@@ -12,11 +16,8 @@ Algospot
 const ProblemTitle = "Quantization Problem"
 
 type Quantization struct {
-	bases []int
 	numbers []int
-	rs map[int][]int
-	// e.g.
-
+	base int
 }
 
 var problem = Quantization{}
@@ -26,75 +27,115 @@ func (p Quantization) GetProblemTitle() string {
 }
 
 func (p Quantization) ReadProblem() {
-	var numbersStr string
-	fmt.Scan(&numbersStr)
+	var size int
+	fmt.Scanf("%d", &size)
 
 	var numberOfBase int
 	fmt.Scanf("%d", &numberOfBase)
 
-	problem.bases = make([]int, numberOfBase)
-	problem.numbers = transformNumberString(numbersStr)
+	problem.base = numberOfBase
+
+	numbers := make([]int, size)
+
+	for i := 0; i < size; i++ {
+		var n int
+		fmt.Scanf("%d", &n)
+
+		numbers[i] = n
+	}
+
+	problem.numbers = numbers
 }
 
 func (p Quantization) SolveProblem() interface{} {
 
+	msd := math.MaxUint32
+	for nbase := problem.base; nbase > 0; nbase-- {
+		fmt.Println(nbase)
+		fmt.Println(problem.numbers)
+		calculated := quantize(problem.numbers, nbase)
+		if calculated < msd {
+			msd = calculated
+		}
+		fmt.Println(calculated)
+	}
 
-	return 0
+	return msd
 }
 
-func quantize(numbers []int, depth int) []([]int) {
+func quantize(numbers []int, base int) int {
 
-	groups := make([][]int, depth)
+	groups := [][]int{}
 
-	longer := numbers
+	longer := &numbers
 
-	for i := 0; i < depth; i++ {
-		avg := average(&longer)
+	for len(groups) < base {
+		avg := average(longer)
 
-		left, right := split(&longer, avg)
+
+		left, right := split(longer, avg)
 
 		numberOfLefts, numberOfRights := len(left), len(right)
 
-		if numberOfLefts == 0 || numberOfRights == 0 {
-			break
-		}
+		arrays := append(groups, left, right)
+		longer = findLongerArray(&arrays)
 
-		if numberOfLefts < numberOfRights {
-			groups[i] = left
+		findAndRemove(&groups, longer)
+
+		if numberOfLefts == 0 || numberOfRights == 0 {
+			groups = append(groups, *longer)
+			break
+
+		} else if numberOfLefts < numberOfRights {
+			groups = append(groups, left)
+
+		} else if numberOfLefts > numberOfRights {
+			groups = append(groups, right)
 		} else {
-			groups[i] = right
+			groups = append(groups, left)
+			groups = append(groups, right)
 		}
 	}
 
+	msd := 0 // sum of mean square deviation
+	for _, list := range groups {
+		msd += deviation(&list)
+	}
 
+	return msd
 }
 
-func findLongerArray(arrays ...*[]int) []int {
+// TODO: 값 비교가 최선은 아니겠지...
+func findAndRemove(groups *[][]int, target *[]int) {
+	for i, list := range *groups {
+		if reflect.DeepEqual(list, *target) {
+			*groups = append((*groups)[:i], (*groups)[i+1:]...)
+		}
+	}
+}
+
+
+func findLongerArray(arrays *[][]int) *[]int {
 	llen := 0
-	var larr []int
+	var larr *[]int
 
 	for _, arr := range *arrays {
 		if len(arr) > llen {
-			llen = len(*arr)
-			larr = *arr
+			llen = len(arr)
+			larr = &arr
 		}
 	}
 
 	return larr
 }
 
-func transformNumberString(numberStr string) []int {
-
-
-	return []int{}
-}
-
 // Mean Square Deviation
-func deviation(list *[]int, average int) int {
+func deviation(list *[]int) int {
+	avg := average(list)
 	sum := 0
 
 	for _, elem := range *list {
-		dev := average - elem
+		dev := avg - elem
 		sum += dev * dev
 	}
 

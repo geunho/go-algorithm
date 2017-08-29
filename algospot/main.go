@@ -7,6 +7,7 @@ import (
 	"github.com/GeunhoKim/go-algorithm/algospot/fanmeeting"
 	"github.com/GeunhoKim/go-algorithm/algospot/fence"
 	"github.com/GeunhoKim/go-algorithm/algospot/quadtree"
+	"github.com/GeunhoKim/go-algorithm/algospot/quantization"
 )
 
 /*
@@ -25,6 +26,7 @@ var problems = map[string]Problem{
 	"fanmeeting": fanmeeting.FanMeeting{},
 	"quadtree":   quadtree.QuadTree{},
 	"fence":      fence.Fence{},
+	"quantization": quantization.Quantization{},
 }
 
 func main() {
