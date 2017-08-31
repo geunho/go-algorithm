@@ -12,6 +12,8 @@ func TestAverage(t *testing.T) {
 
 	result := average(&list)
 
+	fmt.Println(result)
+
 	if result != solution {
 		t.Error(
 			"For", list,
@@ -22,10 +24,15 @@ func TestAverage(t *testing.T) {
 }
 
 func TestSplit(t *testing.T) {
-	list := []int { 15, 6, 7 }
-	sleft := []int {6, 7}
-	sright := []int {15}
-	average := 9
+	//list := []int { 15, 6, 7 }
+	//sleft := []int {6, 7}
+	//sright := []int {15}
+	//average := 9
+
+	list := []int { 1, 2, 2, 2, 2, 1 }
+	sleft := []int { 1, 1 }
+	sright := []int { 2, 2, 2, 2}
+	average := 2
 
 	left, right := split(&list, average)
 
@@ -64,15 +71,22 @@ func TestDeviation(t *testing.T) {
 }
 
 func TestFindLongerArray(t *testing.T) {
+	//arrays := [][]int{
+	//	{ 1, 2 },
+	//	{ 4 },
+	//	{ 7, 8, 9, 10 },
+	//}
+
 	arrays := [][]int{
-		{ 1, 2 },
-		{ 4 },
-		{ 7, 8, 9, 10 },
+		{1, 4, 6},
+		{744, 755, 777},
+		{890},
+		{897, 902},
 	}
 
 	result := findLongerArray(&arrays)
 
-	fmt.Println(*result)
+	fmt.Println(result)
 }
 
 func TestFindAndRemove(t *testing.T) {
@@ -91,12 +105,27 @@ func TestFindAndRemove(t *testing.T) {
 
 func TestQuantize(t *testing.T) {
 	list := []int { 1, 744, 755, 4, 897, 902, 890, 6, 777 }
-	depth := 3
+	base := 3
 
 	//list := []int { 3, 3, 3, 1, 2, 3, 2, 2, 2, 1 }
-	//depth := 3
+	//base := 3
 
-	result := quantize(&list, depth)
+	//list := []int { 3, 3, 3, 3, 3, 3, 3, 3, 3, 1 }
+	//base := 5
+
+	result := quantize(list, base)
+
+	fmt.Println(result)
+}
+
+func TestSolveProblem(t *testing.T) {
+	//problem.numbers = []int { 1, 744, 755, 4, 897, 902, 890, 6, 777 }
+	//problem.base = 9
+
+	problem.numbers = []int { 3, 3, 3, 3, 3, 3, 3, 3, 3, 1 }
+	problem.base = 2
+
+	result := problem.SolveProblem()
 
 	fmt.Println(result)
 }

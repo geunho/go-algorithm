@@ -14,6 +14,7 @@ Algospot
  */
 
 const ProblemTitle = "Quantization Problem"
+const Debug = true
 
 type Quantization struct {
 	numbers []int
@@ -51,13 +52,14 @@ func (p Quantization) SolveProblem() interface{} {
 
 	msd := math.MaxUint32
 	for nbase := problem.base; nbase > 0; nbase-- {
-		fmt.Println(nbase)
-		fmt.Println(problem.numbers)
+		printd(nbase)
+		printd(problem.numbers)
+
 		calculated := quantize(problem.numbers, nbase)
 		if calculated < msd {
 			msd = calculated
 		}
-		fmt.Println(calculated)
+		printd(calculated)
 	}
 
 	return msd
@@ -66,36 +68,50 @@ func (p Quantization) SolveProblem() interface{} {
 func quantize(numbers []int, base int) int {
 
 	groups := [][]int{}
-
 	longer := &numbers
 
-	for len(groups) < base {
+
+	for {
+		if base == 1 {
+			groups = append(groups, *longer)
+			break
+		}
+
+		findAndRemove(&groups, longer)
 		avg := average(longer)
 
-
 		left, right := split(longer, avg)
-
 		numberOfLefts, numberOfRights := len(left), len(right)
 
 		arrays := append(groups, left, right)
-		longer = findLongerArray(&arrays)
+		larr := findLongerArray(&arrays)
+		longer = &larr
+		fmt.Println(arrays)
+		fmt.Println(longer)
 
-		findAndRemove(&groups, longer)
+		if len(groups) > base - 2 {
+			if numberOfLefts == 0 || numberOfRights == 0 {
+				groups = append(groups, *longer)
 
-		if numberOfLefts == 0 || numberOfRights == 0 {
-			groups = append(groups, *longer)
-			break
+			} else if numberOfLefts < numberOfRights {
+				groups = append(groups, left)
 
-		} else if numberOfLefts < numberOfRights {
-			groups = append(groups, left)
+			} else if numberOfLefts > numberOfRights {
+				groups = append(groups, right)
+			}
 
-		} else if numberOfLefts > numberOfRights {
-			groups = append(groups, right)
 		} else {
 			groups = append(groups, left)
 			groups = append(groups, right)
 		}
+
+		if len(groups) == base {
+			break
+		}
 	}
+
+	fmt.Println()
+	fmt.Println(groups)
 
 	msd := 0 // sum of mean square deviation
 	for _, list := range groups {
@@ -106,23 +122,30 @@ func quantize(numbers []int, base int) int {
 }
 
 // TODO: 값 비교가 최선은 아니겠지...
-func findAndRemove(groups *[][]int, target *[]int) {
+func findAndRemove(groups *[][]int, target *[]int) bool {
 	for i, list := range *groups {
 		if reflect.DeepEqual(list, *target) {
 			*groups = append((*groups)[:i], (*groups)[i+1:]...)
+			return true
 		}
 	}
+
+	return false
 }
 
 
-func findLongerArray(arrays *[][]int) *[]int {
-	llen := 0
-	var larr *[]int
+func findLongerArray(arrays *[][]int) []int {
+	var larr []int
 
 	for _, arr := range *arrays {
-		if len(arr) > llen {
-			llen = len(arr)
-			larr = &arr
+		devi_larr := deviation(&larr)
+		devi_target := deviation(&arr)
+		if devi_larr < devi_target {
+			larr = arr
+		} else if devi_larr == devi_target {
+			if len(larr) < len(arr) {
+				larr = arr
+			}
 		}
 	}
 
@@ -150,7 +173,7 @@ func average(list *[]int) int {
 		sum += float64(elem)
 	}
 
-	result := (sum / float64(len(*list))) + 0.5 /*rounds */
+	result := (sum / float64(len(*list))) + 0.5  /*rounds */
 
 	return int(result)
 }
@@ -159,8 +182,11 @@ func split(list *[]int, average int) ([]int, []int) {
 	left := []int{}
 	right := []int{}
 
+	fmt.Print("split avg: ")
+	fmt.Println(average)
+
 	for _, elem := range *list {
-		if elem <= average {
+		if elem < average {
 			left = append(left, elem)
 		} else {
 			right = append(right, elem)
@@ -168,4 +194,10 @@ func split(list *[]int, average int) ([]int, []int) {
 	}
 
 	return left, right
+}
+
+func printd(args ...interface{}) {
+	if Debug {
+		fmt.Println(args)
+	}
 }
