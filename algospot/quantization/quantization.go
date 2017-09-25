@@ -11,6 +11,8 @@ import (
 Algospot
 	Chapter 8.9 QUANTIZATION
 	(https://algospot.com/judge/problem/read/QUANTIZE)
+
+	제출시 오류.
  */
 
 const ProblemTitle = "Quantization Problem"
