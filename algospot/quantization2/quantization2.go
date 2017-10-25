@@ -107,7 +107,7 @@ func average(sum int, length int) int {
 	return int(result)
 }
 
-func quantization(start int, base int) int {rfv
+func quantization(start int, base int) int {
 	if start == problem.base {
 		return 0
 	}
