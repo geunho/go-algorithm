@@ -18,8 +18,6 @@ type FanMeeting struct {
 	fans    []bool
 }
 
-var problem = FanMeeting{}
-
 const (
 	M = true
 	F = false
@@ -29,34 +27,34 @@ func (p FanMeeting) GetProblemTitle() string {
 	return ProblemTitle
 }
 
-func (p FanMeeting) ReadProblem() {
+func (p *FanMeeting) ReadProblem() {
 	var membersStr string
 	fmt.Scan(&membersStr)
-	problem.members = transformGenderInputs(membersStr)
+	p.members = transformGenderInputs(membersStr)
 
 	var fansStr string
 	fmt.Scan(&fansStr)
-	problem.fans = transformGenderInputs(fansStr)
+	p.fans = transformGenderInputs(fansStr)
 }
 
 func (p FanMeeting) SolveProblem() interface{} {
-	nMembers := len(problem.members)
-	nIterations := len(problem.fans) - nMembers + 1
+	nMembers := len(p.members)
+	nIterations := len(p.fans) - nMembers + 1
 
-	menInMembers := findMenIndicesInMembers(&(problem.members))
+	menInMembers := findMenIndicesInMembers(&(p.members))
 
 	if len(menInMembers) == 0 {
 		return nIterations
 	}
 
-	menInFans := findMenIndicesInMembers(&(problem.fans))
+	menInFans := findMenIndicesInMembers(&(p.fans))
 
 	if len(menInFans) == 0 {
 		return nIterations
 	}
 
-	//result := asyncHug(&menInMembers, &(problem.fans), nIterations, nMembers)
-	result := hug(&menInMembers, &(problem.fans), nIterations, nMembers)
+	//result := asyncHug(&menInMembers, &(p.fans), nIterations, nMembers)
+	result := hug(&menInMembers, &(p.fans), nIterations, nMembers)
 
 	return result
 }

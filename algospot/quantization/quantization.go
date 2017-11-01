@@ -23,20 +23,18 @@ type Quantization struct {
 	base int
 }
 
-var problem = Quantization{}
-
 func (p Quantization) GetProblemTitle() string {
 	return ProblemTitle
 }
 
-func (p Quantization) ReadProblem() {
+func (p *Quantization) ReadProblem() {
 	var size int
 	fmt.Scanf("%d", &size)
 
 	var numberOfBase int
 	fmt.Scanf("%d", &numberOfBase)
 
-	problem.base = numberOfBase
+	p.base = numberOfBase
 
 	numbers := make([]int, size)
 
@@ -47,21 +45,18 @@ func (p Quantization) ReadProblem() {
 		numbers[i] = n
 	}
 
-	problem.numbers = numbers
+	p.numbers = numbers
 }
 
 func (p Quantization) SolveProblem() interface{} {
 
 	msd := math.MaxUint32
-	for nbase := problem.base; nbase > 0; nbase-- {
-		printd(nbase)
-		printd(problem.numbers)
+	for nbase := p.base; nbase > 0; nbase-- {
 
-		calculated := quantize(problem.numbers, nbase)
+		calculated := quantize(p.numbers, nbase)
 		if calculated < msd {
 			msd = calculated
 		}
-		printd(calculated)
 	}
 
 	return msd
@@ -88,8 +83,6 @@ func quantize(numbers []int, base int) int {
 		arrays := append(groups, left, right)
 		larr := findLongerArray(&arrays)
 		longer = &larr
-		fmt.Println(arrays)
-		fmt.Println(longer)
 
 		if len(groups) > base - 2 {
 			if numberOfLefts == 0 || numberOfRights == 0 {
@@ -111,9 +104,6 @@ func quantize(numbers []int, base int) int {
 			break
 		}
 	}
-
-	fmt.Println()
-	fmt.Println(groups)
 
 	msd := 0 // sum of mean square deviation
 	for _, list := range groups {
@@ -184,9 +174,6 @@ func split(list *[]int, average int) ([]int, []int) {
 	left := []int{}
 	right := []int{}
 
-	fmt.Print("split avg: ")
-	fmt.Println(average)
-
 	for _, elem := range *list {
 		if elem < average {
 			left = append(left, elem)
@@ -196,10 +183,4 @@ func split(list *[]int, average int) ([]int, []int) {
 	}
 
 	return left, right
-}
-
-func printd(args ...interface{}) {
-	if Debug {
-		fmt.Println(args)
-	}
 }

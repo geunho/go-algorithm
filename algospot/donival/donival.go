@@ -1,8 +1,9 @@
 package donival
 
-const F, T = false, true
+const F = false
+const T = true
 
-var numberOfNodes, targetLength, startNode = 5, 2, 0
+var numberOfNodes, startNode = 5, 0
 
 var connected = [5][5]bool {
 	{F, T, T, T, F},
@@ -33,7 +34,7 @@ func search(currentNode int, length int) float64 {
 
 	var result = &searched[currentNode][length-1]
 
-	if *result > -0.5 {
+	if *result > 0 {
 		return *result
 	}
 

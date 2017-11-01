@@ -8,6 +8,7 @@ import (
 	"github.com/GeunhoKim/go-algorithm/algospot/fence"
 	"github.com/GeunhoKim/go-algorithm/algospot/quadtree"
 	"github.com/GeunhoKim/go-algorithm/algospot/quantization"
+	"github.com/GeunhoKim/go-algorithm/algospot/matchorder"
 )
 
 /*
@@ -23,10 +24,11 @@ type Problem interface {
 }
 
 var problems = map[string]Problem{
-	"fanmeeting": fanmeeting.FanMeeting{},
-	"quadtree":   quadtree.QuadTree{},
-	"fence":      fence.Fence{},
-	"quantization": quantization.Quantization{},
+	"fanmeeting": &fanmeeting.FanMeeting{},
+	"quadtree":   &quadtree.QuadTree{},
+	"fence":      &fence.Fence{},
+	"quantization": &quantization.Quantization{},
+	"matchorder": &matchorder.MatchOrder{},
 }
 
 func main() {

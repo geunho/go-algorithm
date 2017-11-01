@@ -16,13 +16,11 @@ type Fence struct {
 	panels []int
 }
 
-var problem = Fence{}
-
 func (p Fence) GetProblemTitle() string {
 	return ProblemTitle
 }
 
-func (p Fence) ReadProblem() {
+func (p *Fence) ReadProblem() {
 	var nPanels int
 	fmt.Scanf("%d", &nPanels)
 
@@ -35,11 +33,11 @@ func (p Fence) ReadProblem() {
 		panels[i] = h
 	}
 
-	problem.panels = panels
+	p.panels = panels
 }
 
 func (p Fence) SolveProblem() interface{} {
-	return fence(problem.panels)
+	return fence(p.panels)
 }
 
 // brute force

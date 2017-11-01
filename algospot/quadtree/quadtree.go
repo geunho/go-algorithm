@@ -14,18 +14,16 @@ type QuadTree struct {
 	compressed string
 }
 
-var problem = QuadTree{}
-
 func (p QuadTree)GetProblemTitle() string {
 	return ProblemTitle
 }
 
-func (p QuadTree)ReadProblem() {
-	fmt.Scanf("%s", &(problem.compressed))
+func (p *QuadTree)ReadProblem() {
+	fmt.Scanf("%s", &(p.compressed))
 }
 
 func (p QuadTree)SolveProblem() interface{} {
-	result, _ := reverse([]rune(problem.compressed))
+	result, _ := reverse([]rune(p.compressed))
 
 	return result
 }
