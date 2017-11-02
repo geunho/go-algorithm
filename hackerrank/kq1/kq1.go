@@ -82,7 +82,6 @@ var DAY = map[string] string {
 	"31st": "31",
 }
 
-
 func reformatDate(dates []string) []string {
 
 	formattedDates := make([]string, len(dates))

@@ -14,6 +14,8 @@ func counting(s string) uint32 {
 	runes := []rune(s)
 	size := len(runes)
 	length := 0
+
+	// O(n*(m + m)) = O(nm)
 	for i :=0; i< size-1; i++ {
 		length = 0 // init
 

@@ -35,6 +35,11 @@ type RoyalName struct {
 	birthOrder string
 	order int
 }
+
+func (rn RoyalName)formatStringRoyalName() string {
+	return fmt.Sprintf("%s %s", rn.name, rn.birthOrder)
+}
+
 /*
  * Complete the function below.
  */
@@ -55,14 +60,10 @@ func getSortedList(names []string) []string {
 	result := make([]string, len(names))
 
 	for i:=0; i<len(royalNames); i++ {
-		result[i] = formatStringRoyalName(royalNames[i])
+		result[i] = royalNames[i].formatStringRoyalName()
 	}
 
 	return result
-}
-
-func formatStringRoyalName(royalName RoyalName) string {
-	return fmt.Sprintf("%s %s", royalName.name, royalName.birthOrder)
 }
 
 // name의 순서가 targetName 보다 빠른 경우 true 반환

@@ -6,19 +6,35 @@ import (
 )
 
 func TestConvertBirthOrder(t *testing.T) {
-	order := convertBirthOrder("XLVII")
+	result := convertBirthOrder("XLVII")
+	solution := 47
 
-	fmt.Println(order)
+	fmt.Println(result)
+
+	if result != solution {
+		t.Error(
+			"expected", solution,
+			"result", result,
+		)
+	}
 }
 
 func TestCompareName(t *testing.T) {
 	result := compareName("Abcde", "Accce")
+	solution := true
 
 	fmt.Println(result)
+
+	if result != solution {
+		t.Error(
+			"expected", solution,
+			"result", result,
+		)
+	}
 }
 
 func TestGetSortedList(t *testing.T) {
-	result := getSortedList([]string{"2", "Louis IX","Philippe II"})
+	result := getSortedList([]string{"2", "Philippe II", "Louis IX"})
 
 	fmt.Println(result)
 }
