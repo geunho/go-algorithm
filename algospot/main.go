@@ -9,6 +9,8 @@ import (
 	"github.com/GeunhoKim/go-algorithm/algospot/quadtree"
 	"github.com/GeunhoKim/go-algorithm/algospot/quantization"
 	"github.com/GeunhoKim/go-algorithm/algospot/matchorder"
+	"github.com/GeunhoKim/go-algorithm/algospot/boardcover2"
+	"github.com/GeunhoKim/go-algorithm/algospot/josephus"
 )
 
 /*
@@ -29,6 +31,8 @@ var problems = map[string]Problem{
 	"fence":      &fence.Fence{},
 	"quantization": &quantization.Quantization{},
 	"matchorder": &matchorder.MatchOrder{},
+	"boardcover2": &boardcover2.BoardCover2{},
+	"josephus": &josephus.Josephus{},
 }
 
 func main() {
