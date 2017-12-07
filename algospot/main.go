@@ -11,6 +11,7 @@ import (
 	"github.com/GeunhoKim/go-algorithm/algospot/matchorder"
 	"github.com/GeunhoKim/go-algorithm/algospot/boardcover2"
 	"github.com/GeunhoKim/go-algorithm/algospot/josephus"
+	"github.com/GeunhoKim/go-algorithm/algospot/brackets2"
 )
 
 /*
@@ -33,6 +34,7 @@ var problems = map[string]Problem{
 	"matchorder": &matchorder.MatchOrder{},
 	"boardcover2": &boardcover2.BoardCover2{},
 	"josephus": &josephus.Josephus{},
+	"brackets2": &brackets2.Brackets2{},
 }
 
 func main() {

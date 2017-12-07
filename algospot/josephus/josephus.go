@@ -58,6 +58,6 @@ func solve(n int, k int) (int, int) {
 }
 
 func nextIndex(index int, length int) int {
-	return (index-1) % length
+	return (index-1) % length // index는 직전에 삭제된 항목. 삭제되었기 때문에 -1 을 더해준다.
 }
 
