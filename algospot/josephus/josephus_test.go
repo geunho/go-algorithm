@@ -5,6 +5,10 @@ import (
 	"fmt"
 )
 
+func TestJosephus_nextIndex(t *testing.T) {
+
+}
+
 func TestJosephus_solve_TestCase1(t *testing.T) {
 	n, k := 6, 3
 	s1, s2 := 3, 5
