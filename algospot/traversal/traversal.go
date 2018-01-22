@@ -40,6 +40,7 @@ func (p Traversal) GetProblemTitle() string {
 func (p *Traversal) ReadProblem() {
 	var N int
 	fmt.Scanf("%d", &N)
+	p.N = N
 
 	preOrder := make([]int, N)
 	for i := 0; i < N; i++ {
@@ -110,7 +111,8 @@ func rebuildTree(traversal *Traversal) map[int]*BTNode {
 			nextNode := &BTNode {preOrderNumber, parentNode, nil, nil}
 			nodeList[preOrderNumber] = nextNode
 
-			if parentNode.Left == nil {
+			if parentNode.Left == nil &&
+				nextNode.Label < parentNode.Label {
 				parentNode.Left = nextNode
 				parentNode = nextNode
 

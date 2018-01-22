@@ -34,6 +34,7 @@ type Traversal struct {
 func (p *Traversal)ReadProblem() {
 	var N int
 	fmt.Scanf("%d", &N)
+	p.N = N
 
 	preOrder := make([]int, N)
 	for i := 0; i < N; i++ {
